@@ -26,6 +26,8 @@ for (i in 1999:2015) {
   colnames(outbreak) = c('State', i)
   outbreaks_per_year = merge(outbreaks_per_year, outbreak, all=T)
 }
+outbreaks_per_year = outbreaks_per_year %>%
+  filter(., !State %in% c("Guam","Puerto Rico", "Multistate", "Washington DC", "Republic of Palau"))
 
 # map it per year
 # 1998
@@ -33,9 +35,9 @@ usa <- leaflet() %>%
   addTiles() %>%
   setView(lng = -93.85, lat = 37.45, zoom = 4)
 
-usa2 <-leaflet() %>%
-  addTiles() %>%
-  setView(lng = -100, lat = 50, zoom =3)
+# usa2 <-leaflet() %>%
+#   addTiles() %>%
+#   setView(lng = -100, lat = 50, zoom =3)
 
 ## trial 3
 # pal <- colorNumeric(
@@ -71,26 +73,48 @@ usa2 <-leaflet() %>%
 
 
 ## trial 4
-colStates <- maps::map("state", fill = TRUE, plot = FALSE, region = tolower(outbreaks_per_year$State))
+# colStates <- maps::map("state", fill = TRUE, plot = FALSE, region = state.name)
+# 
+# binpal <- colorBin("Blues", outbreaks_per_year$`1998`, 6, pretty = FALSE)
+# 
+# usa %>%
+#   addPolygons(data = colStates, stroke = TRUE, smoothFactor = 0.2, fillOpacity = 1, color = "#000000", weight = 1,
+#               fillColor = ~binpal(outbreaks_per_year$'1998')) %>%
+#   addLegend("bottomright", pal = binpal, values = outbreaks_per_year$'1998',
+#             title = "Number of Outbreaks",
+#             opacity = 1)
 
-binpal <- colorBin("Blues", outbreaks_per_year$`1998`, 6, pretty = FALSE)
+
+colStates <- maps::map("state", fill = TRUE, plot = FALSE, region = c("California", "Texas"))
+binpal <- colorBin("Blues", outbreaks_per_year$`1998`, pretty = TRUE)
+
+usa %>%
+    addPolygons(data = colStates, stroke = TRUE, smoothFactor = 0.2, fillOpacity = 1, color = "#000000", weight = 1,
+                fillColor = ~binpal(outbreaks_per_year$'1998')) %>%
+    addLegend("bottomright", pal = binpal, values = outbreaks_per_year$'1998',
+              title = "Number of Outbreaks",
+              opacity = 1)
+
+
+## trial 5
+#statesData <- readLines(system.file("us-states.js", package="js"))
+
+usa <- leaflet() %>%
+  addTiles() %>%
+  setView(lng = -93.85, lat = 37.45, zoom = 4)
+
+outbreaks_try = data.frame(State = outbreaks_per_year$State,
+                           year = outbreaks_per_year$'1998')
+
+colStates <- maps::map("state", fill = TRUE, plot = FALSE, region = outbreaks_try$State)
+binpal <- colorBin("Blues", outbreaks_try$year, pretty = TRUE)
 
 usa %>%
   addPolygons(data = colStates, stroke = TRUE, smoothFactor = 0.2, fillOpacity = 1, color = "#000000", weight = 1,
-              fillColor = ~binpal(outbreaks_per_year$'1998')) %>%
-  addLegend("bottomright", pal = binpal, values = outbreaks_per_year$'1998',
+              fillColor = ~binpal(outbreaks_try$year)) %>%
+  addLegend("bottomright", pal = binpal, values = outbreaks_try$year,
             title = "Number of Outbreaks",
             opacity = 1)
-
-
-
-
-
-
-
-
-
-
 
 
 

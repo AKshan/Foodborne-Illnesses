@@ -1,12 +1,6 @@
-library(dplyr)
-library(maps)
-library(ggplot2)
-library(leaflet)
-library(googleVis)
-library(shiny)
-
 outbreaks <- read.csv("outbreaks.csv")
 
+# on map, show sum of illnesses, hospitalizations, fatalities over years
 outbreaks_clean = outbreaks %>%
   select(., Year, Month, State, Species, Illnesses, Hospitalizations, Fatalities) %>%
   mutate(., TotalCases = Illnesses + Hospitalizations + Fatalities)
@@ -28,6 +22,37 @@ for (i in 1999:2015) {
   colnames(outbreak) = c('State', i)
   outbreaks_per_year = merge(outbreaks_per_year, outbreak, all=T)
 }
-
 outbreaks_per_year = outbreaks_per_year %>%
   filter(., !State %in% c("Guam","Puerto Rico", "Multistate", "Washington DC", "Republic of Palau"))
+
+library(googleVis)
+
+states <- data.frame(State = state.name, Outbreaks = outbreaks_per_year$`1999`)
+outbreaksMap <- gvisGeoChart(states, "State", "Outbreaks",
+                          options=list(region="US", 
+                                       displayMode="regions", 
+                                       resolution="provinces",
+                                       width="auto", height="auto"))
+plot(outbreaksMap)
+
+outputmap <- gvisGeoChart(outbreaks_per_year, "State", "1998",
+                                         options=list(region="US", 
+                                                      displayMode="regions", 
+                                                      resolution="provinces",
+                                                      width=1200, height=800))
+plot(outputmap)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
