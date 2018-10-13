@@ -28,3 +28,26 @@ gIllnesses = ggplot(outbreaks_species_top9, aes(x = reorder(Species, numIllnesse
   geom_bar(stat = "identity")
 gIllnesses
 
+plot(gvisColumnChart(data.frame(outbreaks_species_top9$Species, outbreaks_species_top9$numIllnesses)))
+
+
+
+
+
+## location based
+# cases by state
+outbreaks_state_year = outbreaks_clean %>%
+  group_by(., State, Year) %>%
+  summarise(., numCases = sum(TotalCases)) %>%
+  select(., State, Year, numCases)
+
+outbreaks_state = outbreaks_state_year %>%
+  filter(., State == "New York")
+
+gState = ggplot(outbreaks_state, aes(x = Year, y = numCases)) + geom_bar(stat = "identity")
+gState
+
+
+
+
+     
