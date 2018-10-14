@@ -47,7 +47,15 @@ outbreaks_state = outbreaks_state_year %>%
 gState = ggplot(outbreaks_state, aes(x = Year, y = numCases)) + geom_bar(stat = "identity")
 gState
 
+# cases by month
+outbreaks_month = outbreaks_clean %>%
+  group_by(., Month) %>%
+  summarise(., numCases = sum(TotalCases)) %>%
+  mutate(., month = factor(month.name[Month], levels = month.name)) %>% 
+  select(., month, numCases) %>%
+  arrange(., month)
 
+plot(gvisColumnChart(outbreaks_month))
 
 
      

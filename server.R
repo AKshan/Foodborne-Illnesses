@@ -8,29 +8,55 @@ shinyServer(function(input, output) {
                               resolution="provinces",
                               width=900, height=600))})
   
-  # output$numcases <- renderPlot({ggplot(outbreaks_species_top9,
-  #                                            aes(x = Species,
-  #                                                y = input$selectBacteria)) +
-  #                                       geom_bar(stat = "identity")})
-  
   output$illnesses <- renderGvis({
-    df = data.frame(outbreaks_species_top9$Species, outbreaks_species_top9$numIllnesses)
-    gvisColumnChart(df)
+    df = data.frame(outbreaks_species_top10$Species, outbreaks_species_top10$numIllnesses)
+    gvisColumnChart(df,
+                    options = list(title = "Number of Illnesses",
+                                   legend = "none",
+                                   hAxis = "{title:'Species'}",
+                                   vAxis = "{title:'Count'}",
+                                   width = 1200, height = 300))
   })
   
   output$hospitalizations <- renderGvis({
     df = data.frame(outbreaks_species_top9$Species, outbreaks_species_top9$numHospitalizations)
-    gvisColumnChart(df)
+    gvisColumnChart(df,
+                    options = list(title = "Number of Hospitalizations",
+                                   legend = "none",
+                                   hAxis = "{title:'Species'}",
+                                   vAxis = "{title:'Count'}",
+                                   width = 1200, height = 300))
   })
   
   output$fatalities <- renderGvis({
     df = data.frame(outbreaks_species_top9$Species, outbreaks_species_top9$numFatalities)
-    gvisColumnChart(df)
+    gvisColumnChart(df,
+                    options = list(title = "Number of Fatalities",
+                                   legend = "none",
+                                   hAxis = "{title:'Species'}",
+                                   vAxis = "{title:'Count'}",
+                                   width = 1200, height = 300))
   })
   
   output$byState <- renderGvis({
     outbreaks_state = outbreaks_state_year %>%
       filter(., State == input$selectState)
-    gvisColumnChart(outbreaks_state, xvar = "Year")
+    gvisColumnChart(outbreaks_state, xvar = "Year",
+                    options = list(title = "Number of Outbreaks in Each State",
+                                   legend = "none",
+                                   height = 500))
+  })
+  
+  output$casesByMonth <- renderGvis({
+    outbreaks_month = outbreaks_clean %>%
+      group_by(., Month) %>%
+      summarise(., numCases = sum(TotalCases)) %>%
+      mutate(., month = factor(month.name[Month], levels = month.name)) %>% 
+      select(., month, numCases) %>%
+      arrange(., month)
+    gvisColumnChart(outbreaks_month,
+                    options = list(title = "Number of Outbreaks in Each Month",
+                                   legend = "none",
+                                   width = 1000, height = 500))
   })
 })

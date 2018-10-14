@@ -1,7 +1,6 @@
 library(dplyr)
 library(maps)
 library(ggplot2)
-library(leaflet)
 library(googleVis)
 library(shiny)
 
@@ -46,10 +45,10 @@ outbreaks_species_grouped = outbreaks_species %>%
   group_by(., Species) %>%
   summarise(., numIllnesses = sum(Illnesses), numHospitalizations = sum(Hospitalizations), numFatalities = sum(Fatalities))
 
-outbreaks_species_top9 = outbreaks_species_grouped %>%
+outbreaks_species_top10 = outbreaks_species_grouped %>%
   mutate(., totalCases = numIllnesses + numHospitalizations + numFatalities) %>%
   arrange(., desc(totalCases)) %>%
-  head(., 9)
+  head(., 10)
 
 # cases by state
 outbreaks_state_year = outbreaks_clean %>%
