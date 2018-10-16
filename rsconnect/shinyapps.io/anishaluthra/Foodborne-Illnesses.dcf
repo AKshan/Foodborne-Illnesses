@@ -1,0 +1,13 @@
+name: Foodborne-Illnesses
+title: Foodborne-Illnesses
+username:
+account: anishaluthra
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 516035
+bundleId: 1644831
+url: https://anishaluthra.shinyapps.io/Foodborne-Illnesses/
+when: 1539653335.4717
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: README.md|test_bacteria.R|testing_googlevis.R|testing.R|us-states.csv|us-states.js
