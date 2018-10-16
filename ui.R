@@ -1,7 +1,6 @@
 library(shinydashboard)
 
 shinyUI(dashboardPage(
-  skin = "yellow",
   dashboardHeader(title = "Foodborne Illnesses from 1998-2015",
                   titleWidth = 400),
   dashboardSidebar(
@@ -20,7 +19,6 @@ shinyUI(dashboardPage(
               sliderInput("sliderYear", label = h3("Year"), min = 1998, max = 2015, value = 1998)),
       tabItem(tabName = "bacteria",
               titlePanel("Number of Illnesses, Hospitalizations, and Fatalities by the Top Ten Bacteria or Virus"),
-              ## maybe do pie charts instead
               fluidRow(box(htmlOutput("illnesses"), width = 10)),
               fluidRow(box(htmlOutput("hospitalizations"), width = 10)),
               fluidRow(box(htmlOutput("fatalities"), width = 10))),

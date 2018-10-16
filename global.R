@@ -31,6 +31,7 @@ for (i in 1999:2015) {
   colnames(outbreak) = c('State', i)
   outbreaks_per_year = merge(outbreaks_per_year, outbreak, all=T)
 }
+outbreaks_per_year[is.na(outbreaks_per_year)] <- 0
 
 # cases by species
 outbreaks_species = outbreaks_clean[!(is.na(outbreaks_clean$Species) |

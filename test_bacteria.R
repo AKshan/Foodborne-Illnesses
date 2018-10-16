@@ -57,5 +57,14 @@ outbreaks_month = outbreaks_clean %>%
 
 plot(gvisColumnChart(outbreaks_month))
 
+# pie chart by location
+outbreaks_location = outbreaks_clean %>%
+  select(., Location, TotalCases)
 
-     
+outbreaks_location = outbreaks_location[!(outbreaks_location$Location == ""),]
+outbreaks_location = outbreaks_location[- grep(";", outbreaks_location$Location),]
+
+# outbreaks_by_location = outbreaks_location %>%
+#   group_by(., Location) %>%
+#   summarise(., numberCases = sum(TotalCases))
+# plot(gvisPieChart(outbreaks_by_location))
